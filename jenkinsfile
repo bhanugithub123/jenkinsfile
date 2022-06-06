@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        name = 'bhanu'
+    }
+    parameters {
+        string(name: 'person', defaultValue: 'xyz', description: 'who are you')
+        booleanParam(name: 'isMale', defaultValue: true, description: '')
+    }
+
+    stages {
+        stage('run a command') {
+            steps {
+                sh '''
+                ls
+                pwd
+                date
+                cal 2022
+                '''
+                sh 'echo $BUILD_ID'
+                
+            }
+        }
+        stage('build') {
+            steps {
+                echo 'build'
+                sh 'echo $name'
+            }
+        }
+        stage('deploy to testing') {
+           environment {
+                 username = 'bhanu'
+            }
+            steps {
+                echo 'deploy to testing'
+                sh 'echo $username'
+            }
+        }
+        stage('continue ?') {
+            input {
+                message 'should we continue'
+                ok 'we should continue'
+            }
+            steps {
+                echo 'deploy to prod'
+            }
+            
+        }
+        stage('deploy to prod') {
+            steps {
+                echo 'deploy to prod'
+            }
+        }
+    }
+}
